@@ -15,12 +15,19 @@
   },
   "dependencies": {
     "babel-eslint": "^7.1.1",
+    "css-loader": "^0.28.4",
     "eslint": "^3.14.1",
     "eslint-plugin-react": "^6.9.0",
+    "extract-text-webpack-plugin": "^2.1.0",
     "firebaseui": "^2.0.0",
+    "material-ui": "^0.18.1",
+    "node-sass": "^4.5.3",
     "path": "^0.12.7",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-tap-event-plugin": "^2.0.1",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.18.1"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

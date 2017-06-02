@@ -2,49 +2,9 @@
 <html>
   <head>
     <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bowling Average</title>
-	<link rel="stylesheet" type="text/css" href="static/style.css"> 
-    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyBOBjNLRhnXM4vLv4zVfCF9_yFt5V0C1EI",
-        authDomain: "bowlingaverage-e9ad3.firebaseapp.com",
-        databaseURL: "https://bowlingaverage-e9ad3.firebaseio.com",
-        projectId: "bowlingaverage-e9ad3",
-        storageBucket: "bowlingaverage-e9ad3.appspot.com",
-        messagingSenderId: "994230171423"
-      };
-      firebase.initializeApp(config);
-    </script>
-    <script type="text/javascript">
-      initApp = function() {
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var uid = user.uid;
-            var phoneNumber = user.phoneNumber;
-            var providerData = user.providerData;
-            user.getIdToken().then(function(accessToken) {
-              console.log(accessToken);
-              }, null, '  ');
-          } else {
-            // User is signed out.
-            window.location.replace("http://localhost:3000");
-          }
-        }, function(error) {
-          console.log(error);
-        });
-      };
-
-      window.addEventListener('load', function() {
-        initApp()
-      });
-    </script>
+	  <link rel="stylesheet" type="text/css" href="static/style.css">
   </head>
   <body>
     <div id="root">

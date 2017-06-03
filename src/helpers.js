@@ -86,3 +86,16 @@ export function clean(scores) {
     return score !== '';
   });
 }
+
+export function getHighScore(games) {
+  var highScore = 0;
+    games.forEach((game) => {
+    game.scores.forEach((score) => {
+      if (score > highScore) {
+        highScore = score;
+      }
+    });
+  });
+  console.log(highScore);
+  return highScore;
+}

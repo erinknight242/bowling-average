@@ -15,7 +15,7 @@ export default function ScoreContainer({ games, addScores, editScores }) {
 
   return (
     <div className="score-container margin-top">
-      <div className="horizontal-flex">
+      <div className="horizontal-flex score-header">
         <h1 className="margin-right">Scores</h1>
         <RaisedButton
           label="Add Date"

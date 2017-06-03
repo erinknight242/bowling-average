@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import NewUser from './NewUser.jsx';
 import KnownUser from './KnownUser.jsx';
 import { getAverage, sortDates } from './helpers';
 import injectTapEventPlugin from 'react-tap-event-plugin';

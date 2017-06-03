@@ -41,7 +41,10 @@ export default function ChartContainer({games}) {
       mode: 'nearest',
       intersect: true
     },
-    responsive: true,
+    global: {
+      responsive: true,
+      maintainAspectRatio: false,
+    },
     scales: {
       xAxes: [{
         type: 'time',
@@ -74,7 +77,7 @@ export default function ChartContainer({games}) {
   return (
     <div className="horizontal-flex margin-top">
       <div className="chart">
-        <Line data={data} options={options} width={600} height={250}/>
+        <Line data={data} options={options} width={600} height={275}/>
       </div>
       <div className="chart-data">
         <div className="data-label">Your Average:</div>

@@ -28,7 +28,7 @@ export default class App extends Component {
     this.state = {
       uid: null,
       db: firebase.database(),
-      games: [],
+      games: null,
       loading: true
     };
   }
@@ -60,16 +60,16 @@ export default class App extends Component {
 
   getGames(uid) {
     var me = this;
-    const ref = this.state.db.ref('users').orderByChild('uid').equalTo(uid).on('value', function(snapshot) {
+      const ref = this.state.db.ref('users/' + uid).on('value', (snapshot) => {
       var data = snapshot.val();
       if (data) {
         me.setState({
-          games: data[0].games,
-          average: getAverage(data[0].games),
+          games: data.games,
+          average: getAverage(data.games),
           loading: false
         });
       } else {
-        me.setState({ loading: false });
+        me.setState({ loading: false, games: null });
       }
     }, function (errorObject) {
       console.log('The read failed: ' + errorObject.code);
@@ -83,8 +83,14 @@ export default class App extends Component {
   render() {
     const loading = <div></div>;
 
-    const app = this.state.uid != null && this.state.games.length ? 
-      <KnownUser average={this.state.average} signOut={this.signOut} games={this.state.games} /> : <NewUser signOut={this.signOut} />;
+    const app = this.state.uid != null && this.state.games != null ? 
+      <KnownUser
+        average={this.state.average}
+        signOut={this.signOut}
+        games={this.state.games}
+        db={this.state.db}
+        uid={this.state.uid}
+      /> : <NewUser signOut={this.signOut} />;
 
     return this.state.uid != null && !this.state.loading ? app : loading;
   }

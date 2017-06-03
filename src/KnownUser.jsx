@@ -4,21 +4,25 @@ import Dialog from 'material-ui/Dialog';
 import { deepOrange500 } from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
+import DatePicker from 'material-ui/DatePicker';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
+import TextField from 'material-ui/TextField';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ChartContainer from './ChartContainer.jsx';
+import ScoreContainer from './ScoreContainer.jsx';
+import { format } from './helpers';
 
 const styles = {};
 
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: '#3C91E6',
-    accent1Color: '#85D838',
-    accent2Color: '#FA824C',
+    accent2Color: '#85D838',
+    accent1Color: '#FA824C',
   },
 });
 
@@ -27,34 +31,69 @@ export default class KnownUser extends Component {
     super(props, context);
 
     this.state = {
-      open: false
+      scoresModalOpen: false,
+      mode: 'Add',
+      date: new Date(),
+      scores: [''],
     };
     
-    this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.addScores = this.addScores.bind(this);
+    this.scoreChanged = this.scoreChanged.bind(this);
+    this.saveScores = this.saveScores.bind(this);
+    this.setDate = this.setDate.bind(this);
   }
 
-  handleRequestClose() {
+  handleClose() {
     this.setState({
-      open: false,
+      scoresModalOpen: false,
+      date: new Date(),
+      scores: ['']
     });
   }
 
-  handleTouchTap() {
+  addScores() {
     this.setState({
-      open: true,
+      scoresModalOpen: true,
+      mode: 'Add',
     });
   }
+
+  setDate(event, date) {
+    this.setState({ date });
+  }
+
+  scoreChanged = (i, event) => {
+    const scores = this.state.scores.slice();
+    scores[i] = event.target.value;
+    if (i === scores.length - 1) {
+      scores.push('');
+    }
+    this.setState({ scores });
+  };
+
+  saveScores() {
+    const scores = this.state.scores.slice(0, this.state.scores.length - 1);
+    var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
+      date: format(this.state.date),
+      scores
+    })
+    this.handleClose();
+  }
+
+    // this.props.db.ref('users/' + userId + '/games').set();
+  /*
+    // Get a key for a new Post.
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/posts/' + newPostKey] = postData;
+  updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+  return firebase.database().ref().update(updates);
+   */
 
   render() {
-     const standardActions = (
-      <FlatButton
-        label="Ok"
-        primary={true}
-        onClick={this.handleRequestClose}
-      />
-    );
-
     const MenuDots = (props) => (
       <IconMenu
         {...props}
@@ -68,14 +107,57 @@ export default class KnownUser extends Component {
       </IconMenu>
     );
 
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={false}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Ok"
+        primary={true}
+        onClick={this.saveScores}
+      />
+    ];
+
+    const inputs = [];
+    for(let i = 0; i < this.state.scores.length; i++) {
+      inputs.push(
+        <TextField
+          key={i}
+          type="number"
+          className="margin-right"
+          hintText="Enter your score"
+          floatingLabelText={'Score ' + (i + 1)}
+          value={this.state.scores[i]}
+          onChange={this.scoreChanged.bind(this, i)}
+        />
+      )
+    }
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container} className="container">
-          <AppBar title={<div><img id="header-logo" src="assets/images/orange-logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
+          <AppBar className="header" title={<div><img id="header-logo" src="assets/images/logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           <div className="content">
             <ChartContainer games={this.props.games}/>
+            <ScoreContainer games={this.props.games} addScores={this.addScores}/>
           </div>
+          <Dialog
+              open={this.state.scoresModalOpen}
+              title={this.state.mode + ' Scores'}
+              actions={actions}
+              onRequestClose={this.handleClose}
+            >
+            <DatePicker
+              hintText="Date" 
+              floatingLabelText="Date"
+              value={this.state.date}
+              onChange={this.setDate}
+              autoOk = {true}
+            />
+            {inputs}
+          </Dialog>
         </div>
       </MuiThemeProvider>
     );
@@ -83,23 +165,7 @@ export default class KnownUser extends Component {
 }
 
 KnownUser.propTypes = {
-  games: PropTypes.array,
+  games: PropTypes.object,
   average: PropTypes.number,
   signOut: PropTypes.func
 };
-
-{/*<Dialog
-                open={this.state.open}
-                title="I know you!"
-                actions={standardActions}
-                onRequestClose={this.handleRequestClose}
-            >
-                Your average is {Math.round(this.props.average)}.
-            </Dialog>
-            <RaisedButton
-                className="margin-top"
-                label="Welcome back!"
-                secondary={true}
-                onClick={this.handleTouchTap}
-            />
-            </div>*/}

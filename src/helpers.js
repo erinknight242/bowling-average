@@ -3,12 +3,17 @@ import moment from 'moment';
 export function getAverage(games) {
   var scoreTotal = 0;
   var scoreCount = 0;
-  games.forEach((game) => {
-    game.scores.forEach((score) => {
-      scoreCount++;
-      scoreTotal += score;
-    });
-  });
+
+  for (var game in games) {
+    if (games.hasOwnProperty(game)) {
+      games[game].scores.forEach((score) => {
+        if (score !== '') {
+          scoreCount++;
+          scoreTotal += parseInt(score);
+        }
+      });
+    }
+  }
   if (scoreCount === 0) {
     return null;
   }
@@ -19,8 +24,10 @@ export function getDailyAverage(game) {
   var scoreTotal = 0;
   var scoreCount = 0;
   game.scores.forEach((score) => {
-    scoreCount++;
-    scoreTotal += score;
+    if (score !== '') {
+      scoreCount++;
+      scoreTotal += parseInt(score);
+    }
   });
   if (scoreCount === 0) {
     return null;
@@ -30,7 +37,12 @@ export function getDailyAverage(game) {
 
 export function getDates(games) {
   var dates = [];
-  games.forEach((game) => dates.push(moment(game.date, 'M/D/YY')));
+  
+  for (var game in games) {
+    if (games.hasOwnProperty(game)) {
+      dates.push(moment(games[game].date, 'M/D/YY'));
+    }
+  }
 
   return dates;
 }
@@ -39,11 +51,21 @@ export function getAverages(games) {
   var daily = [];
   var cumulative = [];
   var runningTotal = 0;
-  games.forEach((game) => daily.push(getDailyAverage(game)));
+
+  for (var game in games) {
+    if (games.hasOwnProperty(game)) {
+      daily.push(getDailyAverage(games[game]))
+    }
+  }
+
   daily.forEach((day, i) => {
     i++;
     runningTotal += day;
     cumulative.push(runningTotal / i);
   });
   return { daily, cumulative };
+}
+
+export function format(date) {
+  return moment(date).format('M/D/YY');
 }

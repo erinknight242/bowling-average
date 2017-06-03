@@ -26,7 +26,11 @@ html, body {
     margin-top: 20px;
 }
 
-.chart-container {
+.margin-right {
+    margin-right: 20px;
+}
+
+.horizontal-flex {
     display: flex;
     align-items: center;
 }
@@ -46,6 +50,6 @@ html, body {
     margin: 20px auto;
 }
 
-button svg {
+.header button svg {
     color: #fff !important;
 }

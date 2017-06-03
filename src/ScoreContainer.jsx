@@ -18,7 +18,7 @@ export default function ScoreContainer({ games, addScores, editScores }) {
       <div className="horizontal-flex">
         <h1 className="margin-right">Scores</h1>
         <RaisedButton
-          label="Add Scores"
+          label="Add Date"
           secondary={true}
           onClick={addScores}
         />

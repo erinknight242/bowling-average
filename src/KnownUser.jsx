@@ -14,7 +14,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ChartContainer from './ChartContainer.jsx';
 import ScoreContainer from './ScoreContainer.jsx';
-import { format } from './helpers';
+import { format, dateUsed } from './helpers';
 
 const styles = {};
 
@@ -35,7 +35,8 @@ export default class KnownUser extends Component {
       mode: 'Add',
       date: new Date(),
       scores: [''],
-      gameId: null
+      gameId: null,
+      errorText: null,
     };
     
     this.handleClose = this.handleClose.bind(this);
@@ -52,7 +53,8 @@ export default class KnownUser extends Component {
       scoresModalOpen: false,
       date: new Date(),
       scores: [''],
-      gameId: null
+      gameId: null,
+      errorText: null
     });
   }
 
@@ -92,17 +94,24 @@ export default class KnownUser extends Component {
     const { mode, gameId, date } = this.state;
     const scores = this.state.scores.slice(0, this.state.scores.length - 1);
     if (mode === 'Add') {
-      var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
-        date: format(date),
-        scores
-      });
+      if (typeof dateUsed(date, this.props.games) === 'object') {
+        this.setState({
+          errorText: <span>Date already exists; edit that row to add scores</span>
+        });
+      } else {
+        var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
+          date: format(date),
+          scores
+        });
+        this.handleClose();
+      }
     } else if (mode === 'Edit' && gameId !== null) {
       var userRef = this.props.db.ref('users/' + this.props.uid + '/games/' + gameId ).update({
         date: format(date),
         scores
       });
+      this.handleClose();
     }
-    this.handleClose();
   }
 
   deleteScores() {
@@ -128,7 +137,7 @@ export default class KnownUser extends Component {
 
     const deleteButton = this.state.mode === 'Edit' ? <RaisedButton
         className="margin-left float-left"
-        label="Delete Scores"
+        label="Delete Date"
         secondary={true}
         onClick={this.deleteScores}
     /> : '';
@@ -173,18 +182,21 @@ export default class KnownUser extends Component {
           </div>
           <Dialog
               open={this.state.scoresModalOpen}
-              title={this.state.mode + ' Scores'}
+              title={this.state.mode + ' Date'}
               actions={actions}
               onRequestClose={this.handleClose}
             >
-            <DatePicker
-              hintText="Date" 
-              floatingLabelText="Date"
-              value={this.state.date}
-              onChange={this.setDate}
-              autoOk = {true}
-            />
-            {inputs}
+            <div className="margin-bottom">
+              <DatePicker
+                errorText={this.state.errorText}
+                hintText="Date" 
+                floatingLabelText="Date"
+                value={this.state.date}
+                onChange={this.setDate}
+                autoOk = {true}
+              />
+              {inputs}
+            </div>
           </Dialog>
         </div>
       </MuiThemeProvider>

@@ -19,5 +19,4 @@ export default function ScoreRow({ game, editScores, gameId }) {
 ScoreRow.propTypes = {
   game: PropTypes.object,
   editScores: PropTypes.func,
-  setGameId: PropTypes.string,
 };

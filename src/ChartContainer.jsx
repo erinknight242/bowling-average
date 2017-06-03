@@ -32,6 +32,10 @@ export default function ChartContainer({games}) {
   var options = {
     legend: {
       display: false
+    }, 
+    tooltips: {
+      mode: 'index',
+      intersect: false,
     },
     hover: {
       mode: 'nearest',
@@ -57,14 +61,18 @@ export default function ChartContainer({games}) {
             month: 'MMM DD',
             quarter: 'MMM DD',
             year: 'MMM DD',
-          }
+          },
+          tooltipFormat: 'MMM DD'
         }
+      }],
+      yAxes: [{
+        display: true,
       }]
     }
   };
 
   return (
-    <div className="horizontal-flex">
+    <div className="horizontal-flex margin-top">
       <div className="chart">
         <Line data={data} options={options} width={600} height={250}/>
       </div>
@@ -77,5 +85,5 @@ export default function ChartContainer({games}) {
 }
 
 ChartContainer.propTypes = {
-  games: PropTypes.object
+  games: PropTypes.array
 };

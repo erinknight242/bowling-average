@@ -35,12 +35,15 @@ export default class KnownUser extends Component {
       mode: 'Add',
       date: new Date(),
       scores: [''],
+      gameId: null
     };
     
     this.handleClose = this.handleClose.bind(this);
     this.addScores = this.addScores.bind(this);
     this.scoreChanged = this.scoreChanged.bind(this);
     this.saveScores = this.saveScores.bind(this);
+    this.editScores = this.editScores.bind(this);
+    this.deleteScores = this.deleteScores.bind(this);
     this.setDate = this.setDate.bind(this);
   }
 
@@ -48,7 +51,8 @@ export default class KnownUser extends Component {
     this.setState({
       scoresModalOpen: false,
       date: new Date(),
-      scores: ['']
+      scores: [''],
+      gameId: null
     });
   }
 
@@ -56,6 +60,18 @@ export default class KnownUser extends Component {
     this.setState({
       scoresModalOpen: true,
       mode: 'Add',
+    });
+  }
+
+  editScores(game) {
+    const scores = game.scores.slice();
+    scores.push('');
+    this.setState({
+      scoresModalOpen: true,
+      mode: 'Edit',
+      date: new Date(game.date),
+      scores,
+      gameId: game.id
     });
   }
 
@@ -73,25 +89,28 @@ export default class KnownUser extends Component {
   };
 
   saveScores() {
+    const { mode, gameId, date } = this.state;
     const scores = this.state.scores.slice(0, this.state.scores.length - 1);
-    var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
-      date: format(this.state.date),
-      scores
-    })
+    if (mode === 'Add') {
+      var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
+        date: format(date),
+        scores
+      });
+    } else if (mode === 'Edit' && gameId !== null) {
+      var userRef = this.props.db.ref('users/' + this.props.uid + '/games/' + gameId ).update({
+        date: format(date),
+        scores
+      });
+    }
     this.handleClose();
   }
 
-    // this.props.db.ref('users/' + userId + '/games').set();
-  /*
-    // Get a key for a new Post.
-
-  // Write the new post's data simultaneously in the posts list and the user's post list.
-  var updates = {};
-  updates['/posts/' + newPostKey] = postData;
-  updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
-  return firebase.database().ref().update(updates);
-   */
+  deleteScores() {
+    if (this.state.gameId !== null ) {
+      var userRef = this.props.db.ref('users/' + this.props.uid + '/games/' + this.state.gameId ).remove();
+      this.handleClose();
+    }
+  }
 
   render() {
     const MenuDots = (props) => (
@@ -107,6 +126,13 @@ export default class KnownUser extends Component {
       </IconMenu>
     );
 
+    const deleteButton = this.state.mode === 'Edit' ? <RaisedButton
+        className="margin-left float-left"
+        label="Delete Scores"
+        secondary={true}
+        onClick={this.deleteScores}
+    /> : '';
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -114,10 +140,12 @@ export default class KnownUser extends Component {
         onClick={this.handleClose}
       />,
       <FlatButton
+        className="margin-right"
         label="Ok"
         primary={true}
         onClick={this.saveScores}
-      />
+      />,
+      deleteButton            
     ];
 
     const inputs = [];
@@ -141,7 +169,7 @@ export default class KnownUser extends Component {
           <AppBar className="header" title={<div><img id="header-logo" src="assets/images/logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           <div className="content">
             <ChartContainer games={this.props.games}/>
-            <ScoreContainer games={this.props.games} addScores={this.addScores}/>
+            <ScoreContainer games={this.props.games} addScores={this.addScores} editScores={this.editScores}/>
           </div>
           <Dialog
               open={this.state.scoresModalOpen}
@@ -165,7 +193,7 @@ export default class KnownUser extends Component {
 }
 
 KnownUser.propTypes = {
-  games: PropTypes.object,
+  games: PropTypes.array,
   average: PropTypes.number,
   signOut: PropTypes.func
 };

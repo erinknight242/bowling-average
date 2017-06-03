@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import NewUser from './NewUser.jsx';
 import KnownUser from './KnownUser.jsx';
-import { getAverage } from './helpers';
+import { getAverage, sortDates } from './helpers';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 require('../assets/css/style.scss');
 
@@ -63,9 +63,10 @@ export default class App extends Component {
       const ref = this.state.db.ref('users/' + uid).on('value', (snapshot) => {
       var data = snapshot.val();
       if (data) {
+        var orderedGames = sortDates(data.games);
         me.setState({
-          games: data.games,
-          average: getAverage(data.games),
+          games: orderedGames,
+          average: getAverage(orderedGames),
           loading: false
         });
       } else {

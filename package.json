@@ -16,13 +16,15 @@
   "dependencies": {
     "chart.js": "^2.6.0",
     "firebaseui": "2.0.0",
+    "lodash": "^4.17.4",
     "material-ui": "0.18.1",
     "moment": "^2.18.1",
     "path": "0.12.7",
     "react": "15.4.2",
     "react-chartjs-2": "^2.1.0",
     "react-dom": "15.4.2",
-    "react-tap-event-plugin": "2.0.1"
+    "react-tap-event-plugin": "2.0.1",
+    "url-loader": "^0.5.8"
   },
   "devDependencies": {
     "babel-core": "6.24.1",

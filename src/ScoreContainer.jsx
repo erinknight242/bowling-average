@@ -3,18 +3,18 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { getDates, getAverages } from './helpers.js';
 import ScoreRow from './ScoreRow.jsx';
 
-export default function ScoreContainer({ games, addScores }) {
+export default function ScoreContainer({ games, addScores, editScores }) {
   const dates = [];
-  var count = 0;
-  for (var game in games) {
-    if (games.hasOwnProperty(game)) {
-      dates.push(<ScoreRow game={games[game]} key={count}/>);
-      count++;
-    }
-  }
+  games.map((game, i) => {
+    dates.push(<ScoreRow
+      game={game}
+      key={i}
+      editScores={editScores.bind(this, game)}/>
+    );
+  });
 
   return (
-    <div className="score-container">
+    <div className="score-container margin-top">
       <div className="horizontal-flex">
         <h1 className="margin-right">Scores</h1>
         <RaisedButton
@@ -29,5 +29,7 @@ export default function ScoreContainer({ games, addScores }) {
 }
 
 ScoreContainer.propTypes = {
-  games: PropTypes.object
+  games: PropTypes.array,
+  editScores: PropTypes.func,
+  addScores: PropTypes.func,
 };

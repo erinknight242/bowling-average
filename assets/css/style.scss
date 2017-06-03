@@ -30,6 +30,10 @@ html, body {
     margin-right: 20px;
 }
 
+.margin-left {
+    margin-left: 20px;
+}
+
 .horizontal-flex {
     display: flex;
     align-items: center;
@@ -45,9 +49,9 @@ html, body {
 
 .content {
     text-align: center;
-    margin-top: 20px;
+    padding-top: 20px;
     width: 1200px;
-    margin: 20px auto;
+    margin: 20px auto 40px;
 }
 
 .header button svg {
@@ -67,4 +71,22 @@ html, body {
             text-align: right;
         }
     }
+}
+
+.edit-icon {
+    display: inline-block;
+    background-image: url('../images/pencil_light_24px.png');
+    width: 24px;
+    height: 24px;
+    margin-top: 4px;
+    margin-left: 10px;
+    background-repeat: no-repeat;
+
+    &:hover {
+      background-image: url('../images/pencil_dark_24px.png')
+    }
+}
+
+.float-left {
+    float: left;
 }

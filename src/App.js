@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import KnownUser from './KnownUser.jsx';
-import { getAverage, sortDates } from './helpers';
+import { getAverage, sortDates, getHighScore } from './helpers';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 require('../assets/css/style.scss');
 
@@ -28,7 +28,8 @@ export default class App extends Component {
       uid: null,
       db: firebase.database(),
       games: null,
-      loading: true
+      loading: true,
+      highScore: null
     };
   }
 
@@ -66,7 +67,8 @@ export default class App extends Component {
         me.setState({
           games: orderedGames,
           average: getAverage(orderedGames),
-          loading: false
+          loading: false,
+          highScore: getHighScore(orderedGames)
         });
       } else {
         me.setState({ loading: false, games: null });
@@ -89,6 +91,7 @@ export default class App extends Component {
       games={this.state.games}
       db={this.state.db}
       uid={this.state.uid}
+      highScore={this.state.highScore}
     />);
 
     return this.state.uid != null && !this.state.loading ? app : loading;

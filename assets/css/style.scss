@@ -131,6 +131,10 @@ html, body {
     .chart-data {
         width: 100%;
         text-align: center;
+        display: flex;
+        .average, .best {
+            flex: 1;
+        }
     }
     .data-label {
         margin-top: 20px;

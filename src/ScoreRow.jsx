@@ -9,9 +9,13 @@ export default function ScoreRow({ game, editScores, gameId }) {
 
   return (
     <div className="score-row horizontal-flex">
-      <div className="edit-icon" onClick={editScores.bind(this, gameId)} />
-      <span className="date">{game.date}</span>
-      {scores}
+      <div className="row-info horizontal-flex">
+        <div className="edit-icon" onClick={editScores.bind(this, gameId)} />
+        <span className="date">{game.date}</span>
+      </div>
+      <div className="score-list horizontal-flex">
+        {scores}
+      </div>
     </div>
   );
 }

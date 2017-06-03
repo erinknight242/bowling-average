@@ -14,7 +14,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ChartContainer from './ChartContainer.jsx';
 import ScoreContainer from './ScoreContainer.jsx';
-import { format, dateUsed } from './helpers';
+import { format, dateUsed, clean } from './helpers';
 
 const styles = {};
 
@@ -92,7 +92,7 @@ export default class KnownUser extends Component {
 
   saveScores() {
     const { mode, gameId, date } = this.state;
-    const scores = this.state.scores.slice(0, this.state.scores.length - 1);
+    const scores = clean(this.state.scores.slice());
     if (mode === 'Add') {
       if (typeof dateUsed(date, this.props.games) === 'object') {
         this.setState({
@@ -199,6 +199,7 @@ export default class KnownUser extends Component {
               title={this.state.mode + ' Date'}
               actions={actions}
               onRequestClose={this.handleClose}
+              autoScrollBodyContent={true}
             >
             <div className="margin-bottom">
               <DatePicker

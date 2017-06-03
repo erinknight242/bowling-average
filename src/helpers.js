@@ -1,6 +1,7 @@
 import moment from 'moment';
 import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
+import remove from 'lodash/remove';
 
 export function getAverage(games) {
   var scoreTotal = 0;
@@ -78,4 +79,10 @@ export function sortDates(games) {
 
 export function dateUsed(date, games) {
   return find(games, function(game) { return game.date === moment(date).format('M/D/YY'); });
+}
+
+export function clean(scores) {
+  return remove(scores, function(score) {
+    return score !== '';
+  });
 }

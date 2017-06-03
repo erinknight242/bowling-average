@@ -98,3 +98,84 @@ html, body {
 .float-left {
     float: left;
 }
+
+@media (max-width: 1280px) {
+    .content {
+        width: 100%;
+        padding-top: 0;
+    }
+    .chart {
+        margin-top: 0;
+        max-width: 900px;
+        padding-left: 25px;
+        padding-right: 35px;
+
+        canvas {
+            width: 100% !important;
+        }
+    }
+    .horizontal-flex {
+        display: inline-block;
+        &.score-header {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            float: left;
+            h1 {
+                display: inline;
+            }
+        }
+    }
+    .jumbo {
+        font-size: 80px;
+    }
+    .chart-data {
+        width: 100%;
+        text-align: center;
+    }
+    .data-label {
+        margin-top: 20px;
+    }
+    .score-row {
+        text-align: left;
+        display: flex;
+        float: left;
+        width: 100%;
+        .date {
+            margin-right: 30px;
+        }
+        .edit-icon {
+            margin-left: 20px;
+        }
+        .score {
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+        .row-info {
+            display: flex;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .jumbo {
+        font-size: 56px;
+    }
+    span.score {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    .score-row {
+        display: block;
+        text-align: center;
+        .edit-icon {
+            margin-left: -50px;
+        }
+        .date {
+            margin-right: 0;
+        }
+        .row-info {
+            justify-content: center;
+        }
+    }
+}

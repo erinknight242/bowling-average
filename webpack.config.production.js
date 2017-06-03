@@ -25,6 +25,11 @@ module.exports = {
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract('css-loader!sass-loader')
+      },
+      {
+        test: /\.png$/,
+        loader: 'url-loader',
+        query: { mimetype: 'image/png' }
       }
     ]
   },

@@ -1,14 +1,49 @@
+$font-color: #342E37;
+$blue: #3C91E6;
+$orange: #FA824C;
+$green: #85D838;
+$bg-color: #FAFFFD;
+
 html, body {
     margin: 0;
     padding: 0;
+    font-family: Roboto, sans-serif;
+    color: $font-color;
+    background: $bg-color;
+}
+
+#header-logo {
+    width: 36px;
+    margin-bottom: -10px;
+    margin-right: 10px;
+}
+
+.jumbo {
+    font-size: 110px;
 }
 
 .margin-top {
     margin-top: 20px;
 }
 
+.chart-container {
+    display: flex;
+    align-items: center;
+}
+
+.chart-data {
+    width: 300px;
+}
+
+.chart {
+    flex: 1;
+}
+
 .content {
     text-align: center;
+    margin-top: 20px;
+    width: 1200px;
+    margin: 20px auto;
 }
 
 button svg {

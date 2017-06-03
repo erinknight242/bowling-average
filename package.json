@@ -14,10 +14,13 @@
     "postbuild": "copyfiles index.html dist"
   },
   "dependencies": {
+    "chart.js": "^2.6.0",
     "firebaseui": "2.0.0",
     "material-ui": "0.18.1",
+    "moment": "^2.18.1",
     "path": "0.12.7",
     "react": "15.4.2",
+    "react-chartjs-2": "^2.1.0",
     "react-dom": "15.4.2",
     "react-tap-event-plugin": "2.0.1"
   },

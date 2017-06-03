@@ -62,7 +62,6 @@ export default class App extends Component {
     var me = this;
     const ref = this.state.db.ref('users').orderByChild('uid').equalTo(uid).on('value', function(snapshot) {
       var data = snapshot.val();
-      console.log(data);
       if (data) {
         me.setState({
           games: data[0].games,
@@ -85,7 +84,7 @@ export default class App extends Component {
     const loading = <div></div>;
 
     const app = this.state.uid != null && this.state.games.length ? 
-      <KnownUser average={this.state.average} signOut={this.signOut} /> : <NewUser signOut={this.signOut} />;
+      <KnownUser average={this.state.average} signOut={this.signOut} games={this.state.games} /> : <NewUser signOut={this.signOut} />;
 
     return this.state.uid != null && !this.state.loading ? app : loading;
   }

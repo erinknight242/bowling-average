@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
-import {deepOrange500} from 'material-ui/styles/colors';
+import { deepOrange500 } from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 import IconMenu from 'material-ui/IconMenu';
@@ -10,12 +10,15 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/MenuItem';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ChartContainer from './ChartContainer.jsx';
 
 const styles = {};
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
+    primary1Color: '#3C91E6',
+    accent1Color: '#85D838',
+    accent2Color: '#FA824C',
   },
 });
 
@@ -65,12 +68,27 @@ export default class KnownUser extends Component {
       </IconMenu>
     );
 
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
-          <AppBar title="Bowling Average" iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
+        <div style={styles.container} className="container">
+          <AppBar title={<div><img id="header-logo" src="assets/images/orange-logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           <div className="content">
-            <Dialog
+            <ChartContainer games={this.props.games}/>
+          </div>
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+}
+
+KnownUser.propTypes = {
+  games: PropTypes.array,
+  average: PropTypes.number,
+  signOut: PropTypes.func
+};
+
+{/*<Dialog
                 open={this.state.open}
                 title="I know you!"
                 actions={standardActions}
@@ -84,9 +102,4 @@ export default class KnownUser extends Component {
                 secondary={true}
                 onClick={this.handleTouchTap}
             />
-            </div>
-        </div>
-      </MuiThemeProvider>
-    );
-  }
-}
+            </div>*/}

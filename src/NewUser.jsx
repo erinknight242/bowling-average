@@ -67,7 +67,7 @@ export default class NewUser extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <AppBar title="Bowling Average"  iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
+          <AppBar title={<div><img id="header-logo" src="assets/images/orange-logo.png"/>Bowling Average</div>}  iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           <div className="content">
             <Dialog
                 open={this.state.open}

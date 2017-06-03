@@ -172,14 +172,28 @@ export default class KnownUser extends Component {
       )
     }
 
+    const newUser = this.props.games === null;
+    const welcome = (
+      <div className="horizontal-flex margin-top content center">
+        <div className="jumbo">Hi!</div>
+        <RaisedButton
+          className="margin-left"
+          label="Add Scores"
+          secondary={true}
+          onClick={this.addScores}
+        />
+      </div>
+    );
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container} className="container">
           <AppBar className="header" title={<div><img id="header-logo" src="assets/images/logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
-          <div className="content">
+          {newUser && welcome}
+          {!newUser && <div className="content">
             <ChartContainer games={this.props.games}/>
             <ScoreContainer games={this.props.games} addScores={this.addScores} editScores={this.editScores}/>
-          </div>
+          </div>}
           <Dialog
               open={this.state.scoresModalOpen}
               title={this.state.mode + ' Date'}

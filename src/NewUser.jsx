@@ -69,7 +69,7 @@ export default class NewUser extends Component {
         <div style={styles.container}>
           <AppBar className="header" title={<div><img id="header-logo" src="assets/images/logo.png"/>Bowling Average</div>}  iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           <div className="content">
-            <Dialog
+            {/*<Dialog
                 open={this.state.open}
                 title="New User"
                 actions={standardActions}
@@ -77,12 +77,8 @@ export default class NewUser extends Component {
             >
                 No average recorded.
             </Dialog>
-            <RaisedButton
-                className="margin-top"
-                label="Welcome!"
-                secondary={true}
-                onClick={this.handleTouchTap}
-            />
+            */}
+            
           </div>
         </div>
       </MuiThemeProvider>

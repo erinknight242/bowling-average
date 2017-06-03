@@ -84,14 +84,13 @@ export default class App extends Component {
   render() {
     const loading = <div></div>;
 
-    const app = this.state.uid != null && this.state.games != null ? 
-      <KnownUser
-        average={this.state.average}
-        signOut={this.signOut}
-        games={this.state.games}
-        db={this.state.db}
-        uid={this.state.uid}
-      /> : <NewUser signOut={this.signOut} />;
+    const app = (<KnownUser
+      average={this.state.average}
+      signOut={this.signOut}
+      games={this.state.games}
+      db={this.state.db}
+      uid={this.state.uid}
+    />);
 
     return this.state.uid != null && !this.state.loading ? app : loading;
   }

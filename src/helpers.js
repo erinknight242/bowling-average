@@ -33,7 +33,7 @@ export function getDailyAverage(game) {
   if (scoreCount === 0) {
     return null;
   }
-  return scoreTotal / scoreCount;
+  return +((scoreTotal / scoreCount).toFixed(3));
 }
 
 export function getDates(games) {
@@ -58,7 +58,7 @@ export function getAverages(games) {
   daily.forEach((day, i) => {
     i++;
     runningTotal += day;
-    cumulative.push(runningTotal / i);
+    cumulative.push(+(runningTotal / i).toFixed(3));
   });
   return { daily, cumulative };
 }

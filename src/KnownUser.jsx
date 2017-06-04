@@ -239,16 +239,24 @@ export default class KnownUser extends Component {
       )
     }
 
-    const newUser = this.props.games === null;
+    const newUser = this.props.games === null || this.props.games.length === 0;
     const welcome = (
       <div className="horizontal-flex margin-top content center">
         <div className="jumbo">Hi!</div>
-        <RaisedButton
-          className="margin-left"
-          label="Add Scores"
-          secondary={true}
-          onClick={this.addScores}
-        />
+        <div className="horizontal-flex margin-top">
+          <RaisedButton
+            className="margin-left"
+            label={(this.props.startingAverage != '' ? 'Change' : 'Add') + ' Starting Average'}
+            secondary={true}
+            onClick={this.showStartingAverage}
+          />
+          <RaisedButton
+            className="margin-left"
+            label="Add Scores"
+            secondary={true}
+            onClick={this.addScores}
+          />
+        </div>
       </div>
     );
 

@@ -3,21 +3,40 @@ import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
 import remove from 'lodash/remove';
 
-export function getAverage(games) {
+const AVERAGE_COUNT = 27;
+
+/* getAverage: Averages the most recent 27 scores, filling in the manually entered starting
+   average (if it exists) if less than 27 scores exist) */
+export function getAverage(orderedGames, seedAverage) {
+  const orderedScores = [];
+  orderedGames.forEach((game) => {
+    game.scores.forEach((score) => {
+      if (score !== '') {
+        orderedScores.push(score);
+      }
+    });
+  });
+
+  var scores = orderedScores.slice(-AVERAGE_COUNT);
+  if (typeof seedAverage === 'string' && orderedScores.length < 27) {
+    var filler = [];
+    for (let i = 0; i < AVERAGE_COUNT - orderedScores.length; i++) {
+      filler.push(seedAverage);
+    }
+    scores = filler.concat(scores);
+  }
+
   var scoreTotal = 0;
   var scoreCount = 0;
 
-  games.forEach((game) => {
-    game.scores.forEach((score) => {
-      if (score !== '') {
-        scoreCount++;
-        scoreTotal += parseInt(score);
-      }
-    });
+  scores.forEach((score) => {
+    scoreCount++;
+    scoreTotal += parseInt(score);
   });
   if (scoreCount === 0) {
     return null;
   }
+
   return scoreTotal / scoreCount;
 }
 

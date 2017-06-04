@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
-import { deepOrange500 } from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 import DatePicker from 'material-ui/DatePicker';
@@ -32,20 +31,27 @@ export default class KnownUser extends Component {
 
     this.state = {
       scoresModalOpen: false,
+      averageModalOpen: false,
       mode: 'Add',
       date: new Date(),
       scores: [''],
+      average: props.startingAverage,
       gameId: null,
       errorText: null,
     };
     
     this.handleClose = this.handleClose.bind(this);
+    this.handleAverageClose = this.handleAverageClose.bind(this);
     this.addScores = this.addScores.bind(this);
     this.scoreChanged = this.scoreChanged.bind(this);
+    this.averageScoreChanged = this.averageScoreChanged.bind(this);
     this.saveScores = this.saveScores.bind(this);
+    this.saveAverage = this.saveAverage.bind(this);
     this.editScores = this.editScores.bind(this);
     this.deleteScores = this.deleteScores.bind(this);
+    this.deleteAverage = this.deleteAverage.bind(this);
     this.setDate = this.setDate.bind(this);
+    this.showStartingAverage = this.showStartingAverage.bind(this);
   }
 
   handleClose() {
@@ -55,6 +61,19 @@ export default class KnownUser extends Component {
       scores: [''],
       gameId: null,
       errorText: null
+    });
+  }
+
+  handleAverageClose() {
+    this.setState({
+      averageModalOpen: false,
+    });
+  }
+
+  showStartingAverage() {
+    this.setState({
+      averageModalOpen: true,
+      average: this.props.startingAverage
     });
   }
 
@@ -90,6 +109,10 @@ export default class KnownUser extends Component {
     this.setState({ scores });
   };
 
+  averageScoreChanged = (event) => {
+    this.setState({ average: event.target.value });
+  };
+
   saveScores() {
     const { mode, gameId, date } = this.state;
     const scores = clean(this.state.scores.slice());
@@ -114,6 +137,17 @@ export default class KnownUser extends Component {
     }
   }
 
+  saveAverage() {
+    const { average } = this.state;
+    const scores = clean(this.state.scores.slice());
+    if (average !== '') {
+      var userRef = this.props.db.ref('users/' + this.props.uid ).update({
+        average
+      });
+      this.handleAverageClose();
+    }
+  }
+
   deleteScores() {
     if (this.state.gameId !== null ) {
       var userRef = this.props.db.ref('users/' + this.props.uid + '/games/' + this.state.gameId ).remove();
@@ -121,7 +155,19 @@ export default class KnownUser extends Component {
     }
   }
 
+  deleteAverage() {
+    if (this.props.startingAverage !== '' ) {
+      var userRef = this.props.db.ref('users/' + this.props.uid + '/average').remove();
+      this.handleAverageClose();
+    }
+  }
+
   render() {
+    var startingAverageLabel = 'Add';
+    if (this.props.startingAverage != '') {
+      startingAverageLabel = 'Change';
+    }
+
     const MenuDots = (props) => (
       <IconMenu
         {...props}
@@ -131,6 +177,7 @@ export default class KnownUser extends Component {
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
+        <MenuItem primaryText={startingAverageLabel + ' starting average'} onClick={this.showStartingAverage} />
         <MenuItem primaryText="Sign out" onClick={this.props.signOut} />
       </IconMenu>
     );
@@ -155,6 +202,26 @@ export default class KnownUser extends Component {
         onClick={this.saveScores}
       />,
       deleteButton            
+    ];
+
+    const averageActions = [
+      <FlatButton
+        label="Cancel"
+        primary={false}
+        onClick={this.handleAverageClose}
+      />,
+      <FlatButton
+        className="margin-right"
+        label="Ok"
+        primary={true}
+        onClick={this.saveAverage}
+      />,
+      this.props.startingAverage !== '' ? <RaisedButton
+        className="margin-left float-left"
+        label="Delete Starting Average"
+        secondary={true}
+        onClick={this.deleteAverage}
+      /> : ''
     ];
 
     const inputs = [];
@@ -191,7 +258,7 @@ export default class KnownUser extends Component {
           <AppBar className="header" title={<div><img id="header-logo" src="assets/images/logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           {newUser && welcome}
           {!newUser && <div className="content">
-            <ChartContainer games={this.props.games} highScore={this.props.highScore}/>
+            <ChartContainer games={this.props.games} highScore={this.props.highScore} average={this.props.average}/>
             <ScoreContainer games={this.props.games} addScores={this.addScores} editScores={this.editScores}/>
           </div>}
           <Dialog
@@ -213,6 +280,25 @@ export default class KnownUser extends Component {
               {inputs}
             </div>
           </Dialog>
+          <Dialog
+              open={this.state.averageModalOpen}
+              title={startingAverageLabel + ' Starting Average'}
+              actions={averageActions}
+              onRequestClose={this.handleAverageClose}
+              autoScrollBodyContent={true}
+            >
+            <div className="margin-bottom">
+              <p>Your starting average will weigh into your overall average until you have added enough individual scores to outweigh it.</p>
+              <TextField
+                type="number"
+                className="margin-right"
+                hintText="Enter your average score"
+                floatingLabelText={'Starting Average'}
+                value={this.state.average}
+                onChange={this.averageScoreChanged}
+              />
+            </div>
+          </Dialog>
         </div>
       </MuiThemeProvider>
     );
@@ -222,5 +308,6 @@ export default class KnownUser extends Component {
 KnownUser.propTypes = {
   games: PropTypes.array,
   average: PropTypes.number,
+  startingAverage: PropTypes.string,
   signOut: PropTypes.func
 };

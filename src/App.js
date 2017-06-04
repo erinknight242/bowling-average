@@ -28,8 +28,10 @@ export default class App extends Component {
       uid: null,
       db: firebase.database(),
       games: null,
+      average: null,
       loading: true,
-      highScore: null
+      highScore: null,
+      startingAverage: ''
     };
   }
 
@@ -48,7 +50,7 @@ export default class App extends Component {
         user.getIdToken().then(function(accessToken) {
             me.setState({ uid });
             me.getGames(uid);
-            }, null, '  ');
+          }, null, '  ');
         } else {
         // User is signed out.
         window.location.replace('http://localhost:3000');
@@ -66,7 +68,8 @@ export default class App extends Component {
         var orderedGames = sortDates(data.games);
         me.setState({
           games: orderedGames,
-          average: getAverage(orderedGames),
+          startingAverage: data.average || '',
+          average: getAverage(orderedGames, data.average),
           loading: false,
           highScore: getHighScore(orderedGames)
         });
@@ -87,6 +90,7 @@ export default class App extends Component {
 
     const app = (<KnownUser
       average={this.state.average}
+      startingAverage={this.state.startingAverage}
       signOut={this.signOut}
       games={this.state.games}
       db={this.state.db}

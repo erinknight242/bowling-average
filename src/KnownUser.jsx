@@ -32,26 +32,33 @@ export default class KnownUser extends Component {
     this.state = {
       scoresModalOpen: false,
       averageModalOpen: false,
+      bestModalOpen: false,
       mode: 'Add',
       date: new Date(),
       scores: [''],
       average: props.startingAverage,
+      best: props.best,
       gameId: null,
       errorText: null,
     };
     
     this.handleClose = this.handleClose.bind(this);
     this.handleAverageClose = this.handleAverageClose.bind(this);
+    this.handleBestClose = this.handleBestClose.bind(this);
     this.addScores = this.addScores.bind(this);
     this.scoreChanged = this.scoreChanged.bind(this);
     this.averageScoreChanged = this.averageScoreChanged.bind(this);
+    this.bestScoreChanged = this.bestScoreChanged.bind(this);
     this.saveScores = this.saveScores.bind(this);
     this.saveAverage = this.saveAverage.bind(this);
+    this.saveBest = this.saveBest.bind(this);
     this.editScores = this.editScores.bind(this);
     this.deleteScores = this.deleteScores.bind(this);
     this.deleteAverage = this.deleteAverage.bind(this);
+    this.deleteBest = this.deleteBest.bind(this);
     this.setDate = this.setDate.bind(this);
     this.showStartingAverage = this.showStartingAverage.bind(this);
+    this.showBest = this.showBest.bind(this);
   }
 
   handleClose() {
@@ -70,10 +77,23 @@ export default class KnownUser extends Component {
     });
   }
 
+  handleBestClose() {
+    this.setState({
+      bestModalOpen: false,
+    });
+  }
+
   showStartingAverage() {
     this.setState({
       averageModalOpen: true,
       average: this.props.startingAverage
+    });
+  }
+
+  showBest() {
+    this.setState({
+      bestModalOpen: true,
+      best: this.props.best
     });
   }
 
@@ -113,6 +133,10 @@ export default class KnownUser extends Component {
     this.setState({ average: event.target.value });
   };
 
+  bestScoreChanged = (event) => {
+    this.setState({ best: event.target.value });
+  };
+
   saveScores() {
     const { mode, gameId, date } = this.state;
     const scores = clean(this.state.scores.slice());
@@ -139,12 +163,21 @@ export default class KnownUser extends Component {
 
   saveAverage() {
     const { average } = this.state;
-    const scores = clean(this.state.scores.slice());
     if (average !== '') {
       var userRef = this.props.db.ref('users/' + this.props.uid ).update({
         average
       });
       this.handleAverageClose();
+    }
+  }
+
+  saveBest() {
+    const { best } = this.state;
+    if (best !== '') {
+      var userRef = this.props.db.ref('users/' + this.props.uid ).update({
+        best
+      });
+      this.handleBestClose();
     }
   }
 
@@ -162,10 +195,22 @@ export default class KnownUser extends Component {
     }
   }
 
+  deleteBest() {
+    if (this.props.best !== '' ) {
+      var userRef = this.props.db.ref('users/' + this.props.uid + '/best').remove();
+      this.handleBestClose();
+    }
+  }
+
   render() {
     var startingAverageLabel = 'Add';
     if (this.props.startingAverage != '') {
       startingAverageLabel = 'Change';
+    }
+
+    var bestLabel = 'Add';
+    if (this.props.best != '') {
+      bestLabel = 'Change';
     }
 
     const MenuDots = (props) => (
@@ -178,6 +223,7 @@ export default class KnownUser extends Component {
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         <MenuItem primaryText={startingAverageLabel + ' starting average'} onClick={this.showStartingAverage} />
+        <MenuItem primaryText={bestLabel + ' personal best'} onClick={this.showBest} />
         <MenuItem primaryText="Sign out" onClick={this.props.signOut} />
       </IconMenu>
     );
@@ -224,6 +270,26 @@ export default class KnownUser extends Component {
       /> : ''
     ];
 
+    const bestActions = [
+      <FlatButton
+        label="Cancel"
+        primary={false}
+        onClick={this.handleBestClose}
+      />,
+      <FlatButton
+        className="margin-right"
+        label="Ok"
+        primary={true}
+        onClick={this.saveBest}
+      />,
+      this.props.best !== '' ? <RaisedButton
+        className="margin-left float-left"
+        label="Delete Personal Best"
+        secondary={true}
+        onClick={this.deleteBest}
+      /> : ''
+    ];
+
     const inputs = [];
     for(let i = 0; i < this.state.scores.length; i++) {
       inputs.push(
@@ -245,15 +311,20 @@ export default class KnownUser extends Component {
         <div className="jumbo">Hi!</div>
         <div className="horizontal-flex margin-top">
           <RaisedButton
-            className="margin-left"
             label={(this.props.startingAverage != '' ? 'Change' : 'Add') + ' Starting Average'}
             secondary={true}
             onClick={this.showStartingAverage}
           />
           <RaisedButton
             className="margin-left"
-            label="Add Scores"
+            label={(this.props.best != '' ? 'Change' : 'Add') + ' Personal Best'}
             secondary={true}
+            onClick={this.showPersonalBest}
+          />
+          <RaisedButton
+            className="margin-left"
+            label="Add Scores"
+            primary={true}
             onClick={this.addScores}
           />
         </div>
@@ -307,6 +378,25 @@ export default class KnownUser extends Component {
               />
             </div>
           </Dialog>
+          <Dialog
+              open={this.state.bestModalOpen}
+              title={bestLabel + ' Personal Best'}
+              actions={bestActions}
+              onRequestClose={this.handleBestClose}
+              autoScrollBodyContent={true}
+            >
+            <div className="margin-bottom">
+              <p>Your personal best score entered here will be displayed until a higher score is added.</p>
+              <TextField
+                type="number"
+                className="margin-right"
+                hintText="Enter your best score"
+                floatingLabelText={'Personal Best'}
+                value={this.state.best}
+                onChange={this.bestScoreChanged}
+              />
+            </div>
+          </Dialog>
         </div>
       </MuiThemeProvider>
     );
@@ -316,6 +406,7 @@ export default class KnownUser extends Component {
 KnownUser.propTypes = {
   games: PropTypes.array,
   average: PropTypes.number,
+  best: PropTypes.string,
   startingAverage: PropTypes.string,
   signOut: PropTypes.func
 };

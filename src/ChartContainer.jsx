@@ -76,11 +76,11 @@ export default function ChartContainer({games, highScore, average}) {
 
   return (
     <div className="horizontal-flex margin-top">
-      {averages.length && <div className="chart">
+      {averages.daily.length && <div className="chart">
         <Line data={data} options={options} width={600} height={275}/>
       </div>}
       <div className="chart-data">
-        <div className="average margin-right">
+        <div className="average">
           <div className="data-label">Your Average:</div>
           <div className="jumbo">{Math.round(average)}</div>
         </div>

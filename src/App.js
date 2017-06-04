@@ -31,7 +31,8 @@ export default class App extends Component {
       average: null,
       loading: true,
       highScore: null,
-      startingAverage: ''
+      startingAverage: '',
+      best: ''
     };
   }
 
@@ -70,8 +71,9 @@ export default class App extends Component {
           games: orderedGames,
           startingAverage: data.average || '',
           average: getAverage(orderedGames, data.average),
+          best: data.best || '',
           loading: false,
-          highScore: getHighScore(orderedGames)
+          highScore: getHighScore(orderedGames, data.best)
         });
       } else {
         me.setState({ loading: false, games: null });
@@ -90,6 +92,7 @@ export default class App extends Component {
 
     const app = (<KnownUser
       average={this.state.average}
+      best={this.state.best}
       startingAverage={this.state.startingAverage}
       signOut={this.signOut}
       games={this.state.games}

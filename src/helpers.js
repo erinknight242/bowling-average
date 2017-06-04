@@ -106,8 +106,8 @@ export function clean(scores) {
   });
 }
 
-export function getHighScore(games) {
-  var highScore = 0;
+export function getHighScore(games, best) {
+  var highScore = best || 0;
     games.forEach((game) => {
     game.scores.forEach((score) => {
       if (parseInt(score) > parseInt(highScore)) {

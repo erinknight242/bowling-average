@@ -10,11 +10,13 @@ const AVERAGE_COUNT = 27;
 export function getAverage(orderedGames, seedAverage) {
   const orderedScores = [];
   orderedGames.forEach((game) => {
-    game.scores.forEach((score) => {
-      if (score !== '') {
-        orderedScores.push(score);
-      }
-    });
+    if (game.scores) {
+      game.scores.forEach((score) => {
+        if (score !== '') {
+          orderedScores.push(score);
+        }
+      });
+    }
   });
 
   var scores = orderedScores.slice(-AVERAGE_COUNT);
@@ -43,12 +45,14 @@ export function getAverage(orderedGames, seedAverage) {
 export function getDailyAverage(game) {
   var scoreTotal = 0;
   var scoreCount = 0;
-  game.scores.forEach((score) => {
-    if (score !== '') {
-      scoreCount++;
-      scoreTotal += parseInt(score);
-    }
-  });
+  if (game.scores) {
+    game.scores.forEach((score) => {
+      if (score !== '') {
+        scoreCount++;
+        scoreTotal += parseInt(score);
+      }
+    });
+  }
   if (scoreCount === 0) {
     return null;
   }
@@ -108,12 +112,14 @@ export function clean(scores) {
 
 export function getHighScore(games, best) {
   var highScore = best || 0;
-    games.forEach((game) => {
-    game.scores.forEach((score) => {
-      if (parseInt(score) > parseInt(highScore)) {
-        highScore = score;
-      }
-    });
+  games.forEach((game) => {
+    if (game.scores) {
+      game.scores.forEach((score) => {
+        if (parseInt(score) > parseInt(highScore)) {
+          highScore = score;
+        }
+      });
+    }
   });
   return parseInt(highScore);
 }

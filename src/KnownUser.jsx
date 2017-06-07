@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
+import Dialog from './Dialog.jsx';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 import DatePicker from 'material-ui/DatePicker';
@@ -140,23 +140,27 @@ export default class KnownUser extends Component {
   saveScores() {
     const { mode, gameId, date } = this.state;
     const scores = clean(this.state.scores.slice());
-    if (mode === 'Add') {
-      if (typeof dateUsed(date, this.props.games) === 'object') {
-        this.setState({
-          errorText: <span>Date already exists; edit that row to add scores</span>
-        });
-      } else {
-        var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
+    if (scores.length) {
+      if (mode === 'Add') {
+        if (typeof dateUsed(date, this.props.games) === 'object') {
+          this.setState({
+            errorText: <span>Date already exists; edit that row to add scores</span>
+          });
+        } else {
+          var userRef = this.props.db.ref('users/' + this.props.uid + '/games').push({
+            date: format(date),
+            scores
+          });
+          this.handleClose();
+        }
+      } else if (mode === 'Edit' && gameId !== null) {
+        var userRef = this.props.db.ref('users/' + this.props.uid + '/games/' + gameId ).update({
           date: format(date),
           scores
         });
         this.handleClose();
       }
-    } else if (mode === 'Edit' && gameId !== null) {
-      var userRef = this.props.db.ref('users/' + this.props.uid + '/games/' + gameId ).update({
-        date: format(date),
-        scores
-      });
+    } else {
       this.handleClose();
     }
   }
@@ -341,12 +345,11 @@ export default class KnownUser extends Component {
             <ScoreContainer games={this.props.games} addScores={this.addScores} editScores={this.editScores}/>
           </div>}
           <Dialog
-              open={this.state.scoresModalOpen}
-              title={this.state.mode + ' Date'}
-              actions={actions}
-              onRequestClose={this.handleClose}
-              autoScrollBodyContent={true}
-            >
+            open={this.state.scoresModalOpen}
+            title={this.state.mode + ' Date'}
+            actions={actions}
+            onRequestClose={this.handleClose}
+          >
             <div className="margin-bottom">
               <DatePicker
                 errorText={this.state.errorText}
@@ -360,12 +363,11 @@ export default class KnownUser extends Component {
             </div>
           </Dialog>
           <Dialog
-              open={this.state.averageModalOpen}
-              title={startingAverageLabel + ' Starting Average'}
-              actions={averageActions}
-              onRequestClose={this.handleAverageClose}
-              autoScrollBodyContent={true}
-            >
+            open={this.state.averageModalOpen}
+            title={startingAverageLabel + ' Starting Average'}
+            actions={averageActions}
+            onRequestClose={this.handleAverageClose}
+          >
             <div className="margin-bottom">
               <p>Your starting average will weigh into your overall average until you have added enough individual scores to outweigh it.</p>
               <TextField
@@ -379,12 +381,11 @@ export default class KnownUser extends Component {
             </div>
           </Dialog>
           <Dialog
-              open={this.state.bestModalOpen}
-              title={bestLabel + ' Personal Best'}
-              actions={bestActions}
-              onRequestClose={this.handleBestClose}
-              autoScrollBodyContent={true}
-            >
+            open={this.state.bestModalOpen}
+            title={bestLabel + ' Personal Best'}
+            actions={bestActions}
+            onRequestClose={this.handleBestClose}
+          >
             <div className="margin-bottom">
               <p>Your personal best score entered here will be displayed until a higher score is added.</p>
               <TextField

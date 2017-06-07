@@ -3,37 +3,60 @@ import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
 import remove from 'lodash/remove';
 
-export function getAverage(games) {
+const AVERAGE_COUNT = 27;
+
+/* getAverage: Averages the most recent 27 scores, filling in the manually entered starting
+   average (if it exists) if less than 27 scores exist) */
+export function getAverage(orderedGames, seedAverage) {
+  const orderedScores = [];
+  orderedGames.forEach((game) => {
+    if (game.scores) {
+      game.scores.forEach((score) => {
+        if (score !== '') {
+          orderedScores.push(score);
+        }
+      });
+    }
+  });
+
+  var scores = orderedScores.slice(-AVERAGE_COUNT);
+  if (typeof seedAverage === 'string' && orderedScores.length < 27) {
+    var filler = [];
+    for (let i = 0; i < AVERAGE_COUNT - orderedScores.length; i++) {
+      filler.push(seedAverage);
+    }
+    scores = filler.concat(scores);
+  }
+
   var scoreTotal = 0;
   var scoreCount = 0;
 
-  games.forEach((game) => {
-    game.scores.forEach((score) => {
-      if (score !== '') {
-        scoreCount++;
-        scoreTotal += parseInt(score);
-      }
-    });
+  scores.forEach((score) => {
+    scoreCount++;
+    scoreTotal += parseInt(score);
   });
   if (scoreCount === 0) {
     return null;
   }
+
   return scoreTotal / scoreCount;
 }
 
 export function getDailyAverage(game) {
   var scoreTotal = 0;
   var scoreCount = 0;
-  game.scores.forEach((score) => {
-    if (score !== '') {
-      scoreCount++;
-      scoreTotal += parseInt(score);
-    }
-  });
+  if (game.scores) {
+    game.scores.forEach((score) => {
+      if (score !== '') {
+        scoreCount++;
+        scoreTotal += parseInt(score);
+      }
+    });
+  }
   if (scoreCount === 0) {
     return null;
   }
-  return scoreTotal / scoreCount;
+  return +((scoreTotal / scoreCount).toFixed(3));
 }
 
 export function getDates(games) {
@@ -58,7 +81,7 @@ export function getAverages(games) {
   daily.forEach((day, i) => {
     i++;
     runningTotal += day;
-    cumulative.push(runningTotal / i);
+    cumulative.push(+(runningTotal / i).toFixed(3));
   });
   return { daily, cumulative };
 }
@@ -87,14 +110,16 @@ export function clean(scores) {
   });
 }
 
-export function getHighScore(games) {
-  var highScore = 0;
-    games.forEach((game) => {
-    game.scores.forEach((score) => {
-      if (parseInt(score) > parseInt(highScore)) {
-        highScore = score;
-      }
-    });
+export function getHighScore(games, best) {
+  var highScore = best || 0;
+  games.forEach((game) => {
+    if (game.scores) {
+      game.scores.forEach((score) => {
+        if (parseInt(score) > parseInt(highScore)) {
+          highScore = score;
+        }
+      });
+    }
   });
   return parseInt(highScore);
 }

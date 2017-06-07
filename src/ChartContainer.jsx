@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Line } from 'react-chartjs-2';
 import { getDates, getAverages } from './helpers.js';
 
-export default function ChartContainer({games, highScore}) {
+export default function ChartContainer({games, highScore, average}) {
   const averages = getAverages(games);
 
   const data = {
@@ -76,13 +76,13 @@ export default function ChartContainer({games, highScore}) {
 
   return (
     <div className="horizontal-flex margin-top">
-      <div className="chart">
+      {averages.daily.length && <div className="chart">
         <Line data={data} options={options} width={600} height={275}/>
-      </div>
+      </div>}
       <div className="chart-data">
         <div className="average">
           <div className="data-label">Your Average:</div>
-          <div className="jumbo">{Math.round(averages.cumulative[averages.cumulative.length - 1])}</div>
+          <div className="jumbo">{Math.round(average)}</div>
         </div>
         <div className="best">
           <div className="data-label">Personal Best:</div>
@@ -95,5 +95,6 @@ export default function ChartContainer({games, highScore}) {
 
 ChartContainer.propTypes = {
   games: PropTypes.array,
-  highScore: PropTypes.number
+  highScore: PropTypes.number,
+  average: PropTypes.number
 };

@@ -6,7 +6,7 @@ module.exports = {
   entry: './src/index.js',
 
   output: {
-    filename: 'static/bundle.js',
+    filename: 'assets/bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
@@ -40,7 +40,7 @@ module.exports = {
       comments: false
     }),
     new ExtractTextPlugin({
-      filename: 'static/style.css',
+      filename: 'assets/style.css',
       allChunks: true
     }),
   ]

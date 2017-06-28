@@ -41,7 +41,7 @@ export default class KnownUser extends Component {
       gameId: null,
       errorText: null,
     };
-    
+
     this.handleClose = this.handleClose.bind(this);
     this.handleAverageClose = this.handleAverageClose.bind(this);
     this.handleBestClose = this.handleBestClose.bind(this);
@@ -251,7 +251,7 @@ export default class KnownUser extends Component {
         primary={true}
         onClick={this.saveScores}
       />,
-      deleteButton            
+      deleteButton
     ];
 
     const averageActions = [
@@ -353,7 +353,7 @@ export default class KnownUser extends Component {
             <div className="margin-bottom">
               <DatePicker
                 errorText={this.state.errorText}
-                hintText="Date" 
+                hintText="Date"
                 floatingLabelText="Date"
                 value={this.state.date}
                 onChange={this.setDate}

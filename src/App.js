@@ -26,13 +26,15 @@ export default class App extends Component {
 
     this.state = {
       uid: null,
+      displayName: null,
+      email: null,
       db: firebase.database(),
       games: null,
       average: null,
       loading: true,
       highScore: null,
       startingAverage: '',
-      best: ''
+      best: '',
     };
   }
 
@@ -50,6 +52,7 @@ export default class App extends Component {
         var providerData = user.providerData;
         user.getIdToken().then(function(accessToken) {
             me.setState({ uid });
+            me.state.db.ref('users/' + uid).update({ email, displayName, lastAccessed: new Date() });
             me.getGames(uid);
           }, null, '  ');
         } else {

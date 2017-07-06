@@ -2,11 +2,10 @@ import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { getDates, getAverages } from './helpers.js';
 import ScoreRow from './ScoreRow.jsx';
-import reverse from 'lodash/reverse';
 
 export default function ScoreContainer({ games, addScores, editScores }) {
   const dates = [];
-  reverse(games).map((game, i) => {
+  games.map((game, i) => {
     dates.push(<ScoreRow
       game={game}
       key={i}

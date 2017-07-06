@@ -2,6 +2,7 @@ import moment from 'moment';
 import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
 import remove from 'lodash/remove';
+import reverse from 'lodash/reverse';
 
 const AVERAGE_COUNT = 27;
 
@@ -61,7 +62,7 @@ export function getDailyAverage(game) {
 
 export function getDates(games) {
   var dates = [];
-  
+
   games.forEach((game) => {
     dates.push(moment(game.date, 'M/D/YY'));
   })
@@ -97,7 +98,7 @@ export function sortDates(games) {
     }
   }
 
-  return sortBy(games, [function(game) { return moment(game.date, 'M/D/YY'); }]);
+  return reverse(sortBy(games, [function(game) { return moment(game.date, 'M/D/YY'); }]));
 }
 
 export function dateUsed(date, games) {

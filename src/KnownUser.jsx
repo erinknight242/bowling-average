@@ -100,7 +100,7 @@ export default class KnownUser extends Component {
 
   addScores() {
     const date = new Date();
-    const game = find(this.props.games, {date: format(date)});
+    const game = find(this.props.games, { date: format(date) });
     if (game) {
       this.editScores(game);
     } else {

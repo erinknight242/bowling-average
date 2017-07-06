@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import find from 'lodash/find';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from './Dialog.jsx';
 import FlatButton from 'material-ui/FlatButton';
@@ -98,10 +99,16 @@ export default class KnownUser extends Component {
   }
 
   addScores() {
-    this.setState({
-      scoresModalOpen: true,
-      mode: 'Add',
-    });
+    const date = new Date();
+    const game = find(this.props.games, {date: format(date)});
+    if (game) {
+      this.editScores(game);
+    } else {
+      this.setState({
+        scoresModalOpen: true,
+        mode: 'Add',
+      });
+    }
   }
 
   editScores(game) {

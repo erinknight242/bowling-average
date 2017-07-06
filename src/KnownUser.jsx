@@ -232,10 +232,9 @@ export default class KnownUser extends Component {
       </IconMenu>
     );
 
-    const deleteButton = this.state.mode === 'Edit' ? <RaisedButton
+    const deleteButton = this.state.mode === 'Edit' ? <FlatButton
         className="margin-left float-left"
         label="Delete Date"
-        secondary={true}
         onClick={this.deleteScores}
     /> : '';
 
@@ -245,8 +244,8 @@ export default class KnownUser extends Component {
         primary={false}
         onClick={this.handleClose}
       />,
-      <FlatButton
-        className="margin-right"
+      <RaisedButton
+        className="margin-left"
         label="Ok"
         primary={true}
         onClick={this.saveScores}
@@ -260,16 +259,15 @@ export default class KnownUser extends Component {
         primary={false}
         onClick={this.handleAverageClose}
       />,
-      <FlatButton
-        className="margin-right"
+      <RaisedButton
+        className="margin-left"
         label="Ok"
         primary={true}
         onClick={this.saveAverage}
       />,
-      this.props.startingAverage !== '' ? <RaisedButton
+      this.props.startingAverage !== '' ? <FlatButton
         className="margin-left float-left"
         label="Delete Starting Average"
-        secondary={true}
         onClick={this.deleteAverage}
       /> : ''
     ];
@@ -280,16 +278,15 @@ export default class KnownUser extends Component {
         primary={false}
         onClick={this.handleBestClose}
       />,
-      <FlatButton
-        className="margin-right"
+      <RaisedButton
+        className="margin-left"
         label="Ok"
         primary={true}
         onClick={this.saveBest}
       />,
-      this.props.best !== '' ? <RaisedButton
+      this.props.best !== '' ? <FlatButton
         className="margin-left float-left"
         label="Delete Personal Best"
-        secondary={true}
         onClick={this.deleteBest}
       /> : ''
     ];

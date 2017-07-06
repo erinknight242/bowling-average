@@ -315,18 +315,19 @@ export default class KnownUser extends Component {
         <div className="jumbo">Hi!</div>
         <div className="horizontal-flex margin-top">
           <RaisedButton
+            className="margin-bottom"
             label={(this.props.startingAverage != '' ? 'Change' : 'Add') + ' Starting Average'}
             secondary={true}
             onClick={this.showStartingAverage}
           />
           <RaisedButton
-            className="margin-left"
+            className="margin-left margin-bottom"
             label={(this.props.best != '' ? 'Change' : 'Add') + ' Personal Best'}
             secondary={true}
             onClick={this.showPersonalBest}
           />
           <RaisedButton
-            className="margin-left"
+            className="margin-left margin-bottom"
             label="Add Scores"
             primary={true}
             onClick={this.addScores}

@@ -92,7 +92,8 @@ html, body {
     background-repeat: no-repeat;
 
     &:hover {
-      background-image: url('../images/pencil_dark_24px.png')
+      background-image: url('../images/pencil_dark_24px.png');
+      transition: all 450ms;
     }
 }
 

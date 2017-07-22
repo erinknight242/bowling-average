@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { Line } from 'react-chartjs-2';
 import { getDates, getAverages } from './helpers.js';
 
-export default function ChartContainer({games, highScore, average}) {
-  const averages = getAverages(games);
+export default function ChartContainer({games, highScore, average, seedAverage}) {
+  const averages = getAverages(games, seedAverage);
 
   const data = {
   labels: getDates(games),
@@ -32,7 +32,7 @@ export default function ChartContainer({games, highScore, average}) {
   var options = {
     legend: {
       display: false
-    }, 
+    },
     tooltips: {
       mode: 'index',
       intersect: false,

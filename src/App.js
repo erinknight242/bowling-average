@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import KnownUser from './KnownUser.jsx';
-import { getAverage, sortDates, getHighScore } from './helpers';
+import { getAverage, sortDates, getHighScore, getOrderedScores } from './helpers';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 require('../assets/css/style.scss');
 
@@ -73,7 +73,7 @@ export default class App extends Component {
         me.setState({
           games: orderedGames,
           startingAverage: data.average || '',
-          average: getAverage(orderedGames, data.average),
+          average: getAverage(getOrderedScores(orderedGames), data.average),
           best: data.best || '',
           loading: false,
           highScore: getHighScore(orderedGames, data.best)

@@ -33,14 +33,6 @@ export default function ChartContainer({games, highScore, average, seedAverage})
     legend: {
       display: false
     },
-    tooltips: {
-      mode: 'index',
-      intersect: false,
-    },
-    hover: {
-      mode: 'nearest',
-      intersect: true
-    },
     global: {
       responsive: true,
       maintainAspectRatio: false,

@@ -20,7 +20,7 @@ export function getAverage(orderedGames, seedAverage) {
     }
   });
 
-  var scores = orderedScores.slice(-AVERAGE_COUNT);
+  var scores = orderedScores.slice(0, AVERAGE_COUNT);
   if (typeof seedAverage === 'string' && orderedScores.length < 27) {
     var filler = [];
     for (let i = 0; i < AVERAGE_COUNT - orderedScores.length; i++) {
@@ -77,7 +77,7 @@ export function getAverages(games) {
 
   games.forEach((game) => {
     daily.push(getDailyAverage(game))
-  })
+  });
 
   daily.forEach((day, i) => {
     i++;

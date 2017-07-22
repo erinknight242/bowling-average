@@ -8,20 +8,9 @@ const AVERAGE_COUNT = 27;
 
 /* getAverage: Averages the most recent 27 scores, filling in the manually entered starting
    average (if it exists) if less than 27 scores exist) */
-export function getAverage(orderedGames, seedAverage) {
-  const orderedScores = [];
-  orderedGames.forEach((game) => {
-    if (game.scores) {
-      game.scores.forEach((score) => {
-        if (score !== '') {
-          orderedScores.push(score);
-        }
-      });
-    }
-  });
-
+export function getAverage(orderedScores, seedAverage) {
   var scores = orderedScores.slice(0, AVERAGE_COUNT);
-  if (typeof seedAverage === 'string' && orderedScores.length < 27) {
+  if (typeof seedAverage === 'string' && seedAverage != '' && orderedScores.length < 27) {
     var filler = [];
     for (let i = 0; i < AVERAGE_COUNT - orderedScores.length; i++) {
       filler.push(seedAverage);
@@ -41,6 +30,20 @@ export function getAverage(orderedGames, seedAverage) {
   }
 
   return scoreTotal / scoreCount;
+}
+
+export function getOrderedScores(orderedGames) {
+  var orderedScores = [];
+  orderedGames.forEach((game) => {
+    if (game.scores) {
+      game.scores.forEach((score) => {
+        if (score !== '') {
+          orderedScores.push(score);
+        }
+      });
+    }
+  });
+  return orderedScores;
 }
 
 export function getDailyAverage(game) {
@@ -70,20 +73,20 @@ export function getDates(games) {
   return dates;
 }
 
-export function getAverages(games) {
+export function getAverages(games, seedAverage) {
   var daily = [];
   var cumulative = [];
   var runningTotal = 0;
+  var orderedScores = [];
 
-  games.forEach((game) => {
-    daily.push(getDailyAverage(game))
+  reverse(games).forEach((game) => {
+    daily.push(getDailyAverage(game));
+    game.scores.forEach((score) => {
+      orderedScores.push(score);
+    });
+    cumulative.push(+(getAverage(orderedScores.slice(-AVERAGE_COUNT), seedAverage)).toFixed(3));
   });
 
-  daily.forEach((day, i) => {
-    i++;
-    runningTotal += day;
-    cumulative.push(+(runningTotal / i).toFixed(3));
-  });
   return { daily, cumulative };
 }
 

@@ -346,7 +346,7 @@ export default class KnownUser extends Component {
           <AppBar className="header" title={<div><img id="header-logo" src="assets/images/logo.png"/>Bowling Average</div>} iconElementRight={<MenuDots/>} showMenuIconButton={false}/>
           {newUser && welcome}
           {!newUser && <div className="content">
-            <ChartContainer games={this.props.games} highScore={this.props.highScore} average={this.props.average}/>
+            <ChartContainer games={this.props.games} highScore={this.props.highScore} average={this.props.average} seedAverage={this.props.startingAverage}/>
             <ScoreContainer games={this.props.games} addScores={this.addScores} editScores={this.editScores}/>
           </div>}
           <Dialog

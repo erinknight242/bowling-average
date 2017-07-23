@@ -67,7 +67,7 @@ export default function ChartContainer({games, highScore, average, seedAverage})
   };
 
   return (
-    <div className="horizontal-flex margin-top">
+    <div className="chart-container margin-top">
       {averages.daily.length && <div className="chart">
         <Line data={data} options={options} width={600} height={275}/>
       </div>}
